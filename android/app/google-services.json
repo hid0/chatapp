@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "631298427440",
+    "project_id": "chatapp-6024c",
+    "storage_bucket": "chatapp-6024c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:631298427440:android:88ac807a519e3f4aa23bf5",
+        "android_client_info": {
+          "package_name": "xyz.faizhid.chatapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "631298427440-hfs7o8b89m44ct6ins8n40m1t66l38p8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "xyz.faizhid.chatapp",
+            "certificate_hash": "a4a5c78f497993c79e777f5d1c14243994617b13"
+          }
+        },
+        {
+          "client_id": "631298427440-157mbuaud9q3tktiduo2fcr0toth91rs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAHKHbin-IxBSQD3tKNgQRZ_gr3BYtgK2g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "631298427440-157mbuaud9q3tktiduo2fcr0toth91rs.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
