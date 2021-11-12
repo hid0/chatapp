@@ -1,9 +1,11 @@
+// depedencies
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
-
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
+
+// controllers
 import '../controllers/login_controller.dart';
 
 class LoginView extends GetView<LoginController> {
