@@ -3,6 +3,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+// controllers
+import 'package:chatapp/app/controllers/auth_controller.dart';
+
 // pages
 import 'package:chatapp/app/utils/splash_screen.dart';
 import 'package:chatapp/app/utils/loading_page.dart';
@@ -16,6 +19,7 @@ void main() {
 
 class MyApp extends StatelessWidget {
   final Future<FirebaseApp> _initialization = Firebase.initializeApp();
+  final Auth = Get.put(AuthController(), permanent: true);
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -34,11 +38,17 @@ class MyApp extends StatelessWidget {
             future: Future.delayed(Duration(seconds: 3)),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
-                return GetMaterialApp(
-                  debugShowCheckedModeBanner: false,
-                  title: "ChatsApp",
-                  initialRoute: AppPages.INITIAL,
-                  getPages: AppPages.routes,
+                return Obx(
+                  () => GetMaterialApp(
+                    debugShowCheckedModeBanner: false,
+                    title: "ChatsApp",
+                    initialRoute: Auth.inSkipIntro.isTrue
+                        ? Auth.isLoggedIn.isTrue
+                            ? Routes.HOME
+                            : Routes.LOGIN
+                        : Routes.INTRODUCTION,
+                    getPages: AppPages.routes,
+                  ),
                 );
               }
               return SplashScreen();
