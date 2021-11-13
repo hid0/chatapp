@@ -1,4 +1,5 @@
 // depedencies
+import 'package:chatapp/app/routes/app_pages.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -10,7 +11,7 @@ class HomeView extends GetView<HomeController> {
   final List<Widget> Chats = List.generate(
     20,
     (index) => ListTile(
-      onTap: () {},
+      onTap: () => Get.toNamed(Routes.CHAT_ROOM),
       leading: CircleAvatar(
         radius: 30,
         child: Image.asset('assets/logo/noimage.png'),
@@ -80,7 +81,7 @@ class HomeView extends GetView<HomeController> {
                   Material(
                     color: Colors.transparent,
                     child: InkWell(
-                      onTap: () {},
+                      onTap: () => Get.toNamed(Routes.PROFILE),
                       child: Icon(
                         Icons.person_outline_sharp,
                         size: 30,
@@ -102,7 +103,7 @@ class HomeView extends GetView<HomeController> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () => Get.toNamed(Routes.SEARCH),
         child: Icon(Icons.chat_outlined),
         backgroundColor: const Color(0xE38D41EE),
       ),
