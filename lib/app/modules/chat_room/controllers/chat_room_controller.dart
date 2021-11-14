@@ -1,20 +1,40 @@
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
 class ChatRoomController extends GetxController {
   //TODO: Implement ChatRoomController
 
-  final count = 0.obs;
+  var isShowEmoji = false.obs;
+
+  late FocusNode focusNode;
+  late TextEditingController chatController;
+
+  void addEmoToInput(emo) {
+    chatController.text = chatController.text + emo;
+  }
+
+  void delEmo() {
+    chatController.text =
+        chatController.text.substring(0, chatController.text.length - 2);
+  }
+
   @override
   void onInit() {
+    chatController = TextEditingController();
+    focusNode = FocusNode();
+    focusNode.addListener(() {
+      if (focusNode.hasFocus) {
+        isShowEmoji.value = false;
+      }
+    });
     super.onInit();
   }
 
   @override
-  void onReady() {
-    super.onReady();
+  void onClose() {
+    // TODO: implement onClose
+    chatController.dispose();
+    focusNode.dispose();
+    super.onClose();
   }
-
-  @override
-  void onClose() {}
-  void increment() => count.value++;
 }
