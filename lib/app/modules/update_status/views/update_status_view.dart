@@ -12,6 +12,7 @@ class UpdateStatusView extends GetView<UpdateStatusController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: PreferredSize(
         child: AppBar(
           leading: IconButton(

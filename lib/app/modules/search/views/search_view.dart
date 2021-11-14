@@ -50,6 +50,7 @@ class SearchView extends GetView<SearchController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: PreferredSize(
         child: AppBar(
           title: Text(

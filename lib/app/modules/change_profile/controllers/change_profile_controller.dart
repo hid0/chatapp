@@ -1,20 +1,26 @@
 import 'package:get/get.dart';
+import 'package:flutter/widgets.dart';
 
 class ChangeProfileController extends GetxController {
   //TODO: Implement ChangeProfileController
 
-  final count = 0.obs;
+  late TextEditingController emailController;
+  late TextEditingController nameController;
+  late TextEditingController statusController;
+
   @override
   void onInit() {
+    emailController = TextEditingController(text: 'faizhid11@gmail.com');
+    nameController = TextEditingController(text: 'Faiz Hidayatulloh');
+    statusController = TextEditingController();
     super.onInit();
   }
 
   @override
-  void onReady() {
-    super.onReady();
+  void onClose() {
+    emailController.dispose();
+    nameController.dispose();
+    statusController.dispose();
+    super.onClose();
   }
-
-  @override
-  void onClose() {}
-  void increment() => count.value++;
 }
