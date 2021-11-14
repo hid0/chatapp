@@ -55,7 +55,7 @@ class SearchView extends GetView<SearchController> {
           title: Text(
             'Search',
             style: GoogleFonts.poppins(
-              fontSize: 24,
+              fontSize: 20,
               fontWeight: FontWeight.w600,
               color: const Color(0xFFFCFCFC),
             ),

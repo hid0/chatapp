@@ -1,4 +1,5 @@
 // dependencies
+import 'package:chatapp/app/routes/app_pages.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -88,13 +89,13 @@ class ProfileView extends GetView<ProfileController> {
               child: Column(
                 children: [
                   ListTile(
-                    onTap: () {},
+                    onTap: () => Get.toNamed(Routes.UPDATE_STATUS),
                     leading: Icon(Icons.note_add_outlined, size: 30),
                     title: Text(
                       'Update Status',
                       textAlign: TextAlign.left,
                       style: GoogleFonts.poppins(
-                        fontSize: 22,
+                        fontSize: 20,
                         fontWeight: FontWeight.w600,
                         color: const Color(0xFF3D3D3D),
                       ),
@@ -102,13 +103,13 @@ class ProfileView extends GetView<ProfileController> {
                     trailing: Icon(Icons.arrow_right_outlined),
                   ),
                   ListTile(
-                    onTap: () {},
+                    onTap: () => Get.toNamed(Routes.CHANGE_PROFILE),
                     leading: Icon(Icons.person_outline_rounded, size: 30),
                     title: Text(
                       'Change Profile',
                       textAlign: TextAlign.left,
                       style: GoogleFonts.poppins(
-                        fontSize: 22,
+                        fontSize: 20,
                         fontWeight: FontWeight.w600,
                         color: const Color(0xFF3D3D3D),
                       ),
@@ -122,7 +123,7 @@ class ProfileView extends GetView<ProfileController> {
                       'Change Theme',
                       textAlign: TextAlign.left,
                       style: GoogleFonts.poppins(
-                        fontSize: 22,
+                        fontSize: 20,
                         fontWeight: FontWeight.w600,
                         color: const Color(0xFF3D3D3D),
                       ),
