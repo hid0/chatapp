@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
           return GetMaterialApp(
             debugShowCheckedModeBanner: false,
             title: "ChatsApp",
-            initialRoute: Routes.PROFILE,
+            initialRoute: Routes.HOME,
             getPages: AppPages.routes,
           );
           // return FutureBuilder(
