@@ -1,4 +1,5 @@
 // depedencies
+import 'package:chatapp/app/routes/app_pages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:get/get.dart';
@@ -28,7 +29,7 @@ class LoginView extends GetView<LoginController> {
                 ),
                 SizedBox(height: 90),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () => Get.toNamed(Routes.HOME),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

@@ -9,8 +9,8 @@ class ChatRoomController extends GetxController {
   late FocusNode focusNode;
   late TextEditingController chatController;
 
-  void addEmoToInput(emo) {
-    chatController.text = chatController.text + emo;
+  void addEmoToInput(emoji) {
+    chatController.text = chatController.text + emoji.emoji;
   }
 
   void delEmo() {
