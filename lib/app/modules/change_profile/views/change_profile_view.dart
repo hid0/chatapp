@@ -56,9 +56,9 @@ class ChangeProfileView extends GetView<ChangeProfileController> {
             // image container for show image of account
             Container(
               // margin: EdgeInsets.all(30),
-              margin: EdgeInsets.fromLTRB(0, 30, 0, 50),
-              width: 120,
-              height: 120,
+              margin: EdgeInsets.fromLTRB(0, 25, 0, 50),
+              width: 100,
+              height: 100,
               decoration: BoxDecoration(
                 color: Colors.black38,
                 borderRadius: BorderRadius.circular(100),
@@ -185,7 +185,7 @@ class ChangeProfileView extends GetView<ChangeProfileController> {
                 ],
               ),
             ),
-            SizedBox(height: 40),
+            SizedBox(height: 10),
             // button update
             Container(
               width: Get.width,

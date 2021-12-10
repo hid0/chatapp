@@ -53,6 +53,10 @@ class SearchView extends GetView<SearchController> {
       resizeToAvoidBottomInset: false,
       appBar: PreferredSize(
         child: AppBar(
+          leading: IconButton(
+            onPressed: () => Get.back(),
+            icon: Icon(Icons.arrow_back_ios_new_outlined),
+          ),
           title: Text(
             'Search',
             style: GoogleFonts.poppins(
@@ -78,6 +82,7 @@ class SearchView extends GetView<SearchController> {
             child: Align(
               alignment: Alignment.bottomCenter,
               child: TextField(
+                controller: controller.searchController,
                 cursorColor: const Color(0xE36F41EE),
                 decoration: InputDecoration(
                   fillColor: const Color(0xFFE4E4E4),

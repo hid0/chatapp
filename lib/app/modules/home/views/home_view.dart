@@ -47,52 +47,84 @@ class HomeView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          Material(
-            elevation: 5,
-            child: Container(
-              margin: EdgeInsets.only(top: context.mediaQueryPadding.top),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.bottomLeft,
-                  end: Alignment.topRight,
-                  colors: <Color>[
-                    const Color(0xE36F41EE),
-                    const Color(0xE38D41EE),
-                    const Color(0xE3D641EE)
-                  ],
-                ),
-                // border: Border(
-                //     bottom: BorderSide(color: const Color(0x4D383838))),
-              ),
-              padding: EdgeInsets.fromLTRB(20, 30, 20, 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'ChatsApp',
-                    style: GoogleFonts.poppins(
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
-                      color: const Color(0xFFE6E6E6),
-                    ),
-                  ),
-                  Material(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      onTap: () => Get.toNamed(Routes.PROFILE),
-                      child: Icon(
-                        Icons.person_outline_sharp,
-                        size: 30,
-                        color: const Color(0xFFE6E6E6),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+      resizeToAvoidBottomInset: false,
+      appBar: AppBar(
+        title: Text(
+          'ChatsApp',
+          style: GoogleFonts.poppins(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: const Color(0xFFE6E6E6),
+          ),
+        ),
+        automaticallyImplyLeading: false,
+        actions: [
+          IconButton(
+            onPressed: () => Get.toNamed(Routes.PROFILE),
+            icon: Icon(Icons.person_outline_sharp),
+          ),
+        ],
+        flexibleSpace: Container(
+          padding: EdgeInsets.fromLTRB(20, 0, 20, 25),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.bottomLeft,
+              end: Alignment.topRight,
+              colors: <Color>[
+                const Color(0xE36F41EE),
+                const Color(0xE38D41EE),
+                const Color(0xE3D641EE)
+              ],
             ),
           ),
+        ),
+      ),
+      body: Column(
+        children: [
+          // Material(
+          //   elevation: 5,
+          //   child: Container(
+          //     margin: EdgeInsets.only(top: context.mediaQueryPadding.top),
+          //     decoration: BoxDecoration(
+          //       gradient: LinearGradient(
+          //         begin: Alignment.bottomLeft,
+          //         end: Alignment.topRight,
+          //         colors: <Color>[
+          //           const Color(0xE36F41EE),
+          //           const Color(0xE38D41EE),
+          //           const Color(0xE3D641EE)
+          //         ],
+          //       ),
+          //       // border: Border(
+          //       //     bottom: BorderSide(color: const Color(0x4D383838))),
+          //     ),
+          //     padding: EdgeInsets.fromLTRB(20, 30, 20, 20),
+          //     child: Row(
+          //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //       children: [
+          //         Text(
+          //           'ChatsApp',
+          //           style: GoogleFonts.poppins(
+          //             fontSize: 28,
+          //             fontWeight: FontWeight.bold,
+          //             color: const Color(0xFFE6E6E6),
+          //           ),
+          //         ),
+          //         Material(
+          //           color: Colors.transparent,
+          //           child: InkWell(
+          //             onTap: () => Get.toNamed(Routes.PROFILE),
+          //             child: Icon(
+          //               Icons.person_outline_sharp,
+          //               size: 30,
+          //               color: const Color(0xFFE6E6E6),
+          //             ),
+          //           ),
+          //         ),
+          //       ],
+          //     ),
+          //   ),
+          // ),
           Expanded(
             child: ListView.builder(
               padding: EdgeInsets.symmetric(vertical: 10),

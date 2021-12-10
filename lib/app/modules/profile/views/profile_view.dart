@@ -1,14 +1,16 @@
 // dependencies
-import 'package:chatapp/app/routes/app_pages.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:avatar_glow/avatar_glow.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:chatapp/app/routes/app_pages.dart';
 
 // controllers
 import '../controllers/profile_controller.dart';
+import 'package:chatapp/app/controllers/auth_controller.dart';
 
 class ProfileView extends GetView<ProfileController> {
+  final Auth = Get.find<AuthController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,7 +21,7 @@ class ProfileView extends GetView<ProfileController> {
         ),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () => Auth.logout(),
             icon: Icon(Icons.logout_outlined),
           ),
         ],

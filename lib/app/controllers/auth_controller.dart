@@ -7,6 +7,10 @@ class AuthController extends GetxController {
   var isLoggedIn = false.obs;
 
   void login() {
-    Get.toNamed(Routes.HOME);
+    Get.offAllNamed(Routes.HOME);
+  }
+
+  void logout() {
+    Get.offAllNamed(Routes.LOGIN);
   }
 }

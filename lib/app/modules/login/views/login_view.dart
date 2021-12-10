@@ -1,4 +1,5 @@
 // depedencies
+import 'package:chatapp/app/controllers/auth_controller.dart';
 import 'package:chatapp/app/routes/app_pages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
@@ -10,6 +11,7 @@ import 'package:lottie/lottie.dart';
 import '../controllers/login_controller.dart';
 
 class LoginView extends GetView<LoginController> {
+  final Auth = Get.find<AuthController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,7 +31,7 @@ class LoginView extends GetView<LoginController> {
                 ),
                 SizedBox(height: 90),
                 ElevatedButton(
-                  onPressed: () => Get.toNamed(Routes.HOME),
+                  onPressed: () => Auth.login(),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -40,7 +42,7 @@ class LoginView extends GetView<LoginController> {
                       ),
                       SizedBox(width: 15),
                       Text(
-                        'Sign In with Google',
+                        'Login Google',
                         style: GoogleFonts.poppins(
                           fontSize: 18,
                           fontWeight: FontWeight.w600,
@@ -52,7 +54,7 @@ class LoginView extends GetView<LoginController> {
                   style: ElevatedButton.styleFrom(
                     primary: const Color(0xFFFFFFFF),
                     onPrimary: const Color(0xFFC9C9C9),
-                    padding: EdgeInsets.symmetric(vertical: 20),
+                    padding: EdgeInsets.symmetric(vertical: 20, horizontal: 8),
                     shadowColor: const Color(0xFF5A5A5A),
                     maximumSize: Size(200, 90),
                     shape: RoundedRectangleBorder(

@@ -50,6 +50,7 @@ class UpdateStatusView extends GetView<UpdateStatusController> {
         child: Column(
           children: [
             TextField(
+              controller: controller.statusController,
               style: GoogleFonts.poppins(
                 textStyle: TextStyle(
                   color: const Color(0xFF161616),
