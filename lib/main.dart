@@ -34,26 +34,34 @@ class MyApp extends StatelessWidget {
 
         // Once complete, show your application
         if (snapshot.connectionState == ConnectionState.done) {
-          return FutureBuilder(
-            future: Future.delayed(Duration(seconds: 2)),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done) {
-                return Obx(
-                  () => GetMaterialApp(
-                    debugShowCheckedModeBanner: false,
-                    title: "ChatsApp",
-                    initialRoute: Auth.inSkipIntro.isTrue
-                        ? Auth.isLoggedIn.isTrue
-                            ? Routes.HOME
-                            : Routes.LOGIN
-                        : Routes.INTRODUCTION,
-                    getPages: AppPages.routes,
-                  ),
-                );
-              }
-              return SplashScreen();
-            },
+          return Obx(
+            () => GetMaterialApp(
+              debugShowCheckedModeBanner: false,
+              title: "ChatsApp",
+              initialRoute: Auth.isLoggedIn.isTrue ? Routes.HOME : Routes.LOGIN,
+              getPages: AppPages.routes,
+            ),
           );
+          // return FutureBuilder(
+          //   future: Future.delayed(Duration(seconds: 2)),
+          //   builder: (context, snapshot) {
+          //     if (snapshot.connectionState == ConnectionState.done) {
+          //       return Obx(
+          //         () => GetMaterialApp(
+          //           debugShowCheckedModeBanner: false,
+          //           title: "ChatsApp",
+          //           initialRoute: Auth.inSkipIntro.isTrue
+          //               ? Auth.isLoggedIn.isTrue
+          //                   ? Routes.HOME
+          //                   : Routes.LOGIN
+          //               : Routes.INTRODUCTION,
+          //           getPages: AppPages.routes,
+          //         ),
+          //       );
+          //     }
+          //     return SplashScreen();
+          //   },
+          // );
         }
 
         // Otherwise, show something whilst waiting for initialization to complete

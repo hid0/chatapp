@@ -14,11 +14,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "631298427440-hfs7o8b89m44ct6ins8n40m1t66l38p8.apps.googleusercontent.com",
+          "client_id": "631298427440-bq9rnb7ll4ugpnlaqfj80foor4a3og6j.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "xyz.faizhid.chatapp",
-            "certificate_hash": "a4a5c78f497993c79e777f5d1c14243994617b13"
+            "certificate_hash": "e069fdfb026570d47e07640b0c75ba787d68c83b"
           }
         },
         {
