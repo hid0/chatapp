@@ -1,4 +1,5 @@
 // depedencies
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -15,6 +16,8 @@ class AuthController extends GetxController {
   GoogleSignIn _googleSignIn = GoogleSignIn();
   GoogleSignInAccount? _currentUser;
   UserCredential? user;
+
+  FirebaseFirestore fstore = FirebaseFirestore.instance;
 
   Future<void> firstInit() async {
     /* first while running app
@@ -76,6 +79,19 @@ class AuthController extends GetxController {
           box.remove('skipIntro');
         }
         box.write('skipIntro', true);
+
+        // save to firestore
+        CollectionReference users = fstore.collection('users');
+        users.doc(_currentUser!.email).set({
+          "uid": user!.user!.uid,
+          "nama": _currentUser!.displayName,
+          "email": _currentUser!.email,
+          "photoUrl": _currentUser!.photoUrl,
+          "status": "",
+          "created_at": user!.user!.metadata.creationTime!.toIso8601String(),
+          "last_signin": user!.user!.metadata.lastSignInTime!.toIso8601String(),
+          "updated_at": DateTime.now().toIso8601String(),
+        });
 
         isLoggedIn.value = true;
         Get.offAllNamed(Routes.HOME);
