@@ -1,4 +1,5 @@
 // depedencies
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -9,6 +10,7 @@ class AuthController extends GetxController {
   // if intro skip or don't skip
   var inSkipIntro = false.obs;
   var isLoggedIn = false.obs;
+  UserCredential? user;
 
   GoogleSignIn _googleSignIn = GoogleSignIn(
     scopes: [
@@ -19,23 +21,33 @@ class AuthController extends GetxController {
   GoogleSignInAccount? _currentUser;
 
   Future<void> login() async {
-    // Get.offAllNamed(Routes.HOME);
-    //? create login func with google
     try {
+      // handle data leak
       await _googleSignIn.signOut();
+
+      // get account of google
       await _googleSignIn.signIn().then((value) => _currentUser = value);
-      await _googleSignIn.isSignedIn().then((value) {
-        if (value) {
-          // logged in condition
-          print("Berhasil Login");
-          print(_currentUser);
-          isLoggedIn.value = true;
-          Get.offAllNamed(Routes.HOME);
-        } else {
-          // failed login
-          print("Gagal Login");
-        }
-      });
+
+      // check condition
+      final isSignIn = await _googleSignIn.isSignedIn();
+
+      if (isSignIn) {
+        final googleAuth = await _currentUser!.authentication;
+
+        final credential = GoogleAuthProvider.credential(
+          idToken: googleAuth.idToken,
+          accessToken: googleAuth.accessToken,
+        );
+
+        await FirebaseAuth.instance
+            .signInWithCredential(credential)
+            .then((value) => user = value);
+
+        isLoggedIn.value = true;
+        Get.offAllNamed(Routes.HOME);
+      } else {
+        print("Gagal Login");
+      }
     } catch (error) {
       print(error);
     }
