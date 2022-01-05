@@ -1,6 +1,7 @@
 // depedencies
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 // route
@@ -8,17 +9,43 @@ import 'package:chatapp/app/routes/app_pages.dart';
 
 class AuthController extends GetxController {
   // if intro skip or don't skip
-  var inSkipIntro = false.obs;
+  var isSkipIntro = false.obs;
   var isLoggedIn = false.obs;
+
+  GoogleSignIn _googleSignIn = GoogleSignIn();
+  GoogleSignInAccount? _currentUser;
   UserCredential? user;
 
-  GoogleSignIn _googleSignIn = GoogleSignIn(
-    scopes: [
-      'email',
-      'https://www.googleapis.com/auth/contacts.readonly',
-    ],
-  );
-  GoogleSignInAccount? _currentUser;
+  Future<void> firstInit() async {
+    /* first while running app
+    and set isLoggedIn to true (autologin)
+    and set isSkipIntro to true
+    */
+    await autoLogin().then((value) => value ? isLoggedIn.value = true : null);
+
+    await skipIntro().then((value) => value ? isSkipIntro.value = true : null);
+  }
+
+  Future<bool> skipIntro() async {
+    final box = GetStorage();
+    if (box.read('skipIntro') != null || box.read('skipIntro') == true) {
+      return true;
+    }
+    return false;
+  }
+
+  Future<bool> autoLogin() async {
+    try {
+      final isSignIn = await _googleSignIn.isSignedIn();
+      if (isSignIn) {
+        // isLoggedIn.value = true;
+        return true;
+      }
+      return false;
+    } catch (e) {
+      return false;
+    }
+  }
 
   Future<void> login() async {
     try {
@@ -43,6 +70,13 @@ class AuthController extends GetxController {
             .signInWithCredential(credential)
             .then((value) => user = value);
 
+        // save state user logged in & not show intro screen
+        final box = GetStorage();
+        if (box.read('skipIntro') != null) {
+          box.remove('skipIntro');
+        }
+        box.write('skipIntro', true);
+
         isLoggedIn.value = true;
         Get.offAllNamed(Routes.HOME);
       } else {
@@ -54,6 +88,7 @@ class AuthController extends GetxController {
   }
 
   Future<void> logout() async {
+    await _googleSignIn.disconnect();
     await _googleSignIn.signOut();
     Get.offAllNamed(Routes.LOGIN);
   }
