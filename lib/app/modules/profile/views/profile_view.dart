@@ -54,18 +54,22 @@ class ProfileView extends GetView<ProfileController> {
                     margin: EdgeInsets.all(15),
                     width: 160,
                     height: 160,
-                    decoration: BoxDecoration(
-                      color: Colors.black38,
-                      borderRadius: BorderRadius.circular(100),
-                      image: DecorationImage(
-                        image: AssetImage('assets/logo/noimage.png'),
-                        fit: BoxFit.cover,
-                      ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(200),
+                      child: Auth.userThis.photoUrl == null
+                          ? Image.asset(
+                              'assets/logo/noimage.png',
+                              fit: BoxFit.cover,
+                            )
+                          : Image.network(
+                              Auth.userThis.photoUrl!,
+                              fit: BoxFit.cover,
+                            ),
                     ),
                   ),
                 ),
                 Text(
-                  'Lorem Ipsum',
+                  "${Auth.userThis.name}",
                   textAlign: TextAlign.center,
                   style: GoogleFonts.poppins(
                     fontSize: 23,
@@ -74,7 +78,7 @@ class ProfileView extends GetView<ProfileController> {
                   ),
                 ),
                 Text(
-                  'loremip@mail.com',
+                  "${Auth.userThis.email}",
                   textAlign: TextAlign.center,
                   style: GoogleFonts.poppins(
                     fontSize: 18,

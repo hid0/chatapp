@@ -1,9 +1,10 @@
 // depedencies
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:chatapp/app/data/models/user_model.dart';
 
 // route
 import 'package:chatapp/app/routes/app_pages.dart';
@@ -17,6 +18,8 @@ class AuthController extends GetxController {
   GoogleSignInAccount? _currentUser;
   UserCredential? user;
 
+  UserModel userThis = UserModel();
+
   FirebaseFirestore fstore = FirebaseFirestore.instance;
 
   Future<void> firstInit() async {
@@ -24,9 +27,9 @@ class AuthController extends GetxController {
     and set isLoggedIn to true (autologin)
     and set isSkipIntro to true
     */
-    await autoLogin().then((value) => value ? isLoggedIn.value = true : null);
+    await autoLogin().then((value) => {if (value) isLoggedIn.value = true});
 
-    await skipIntro().then((value) => value ? isSkipIntro.value = true : null);
+    await skipIntro().then((value) => {if (value) isSkipIntro.value = true});
   }
 
   Future<bool> skipIntro() async {
@@ -41,7 +44,42 @@ class AuthController extends GetxController {
     try {
       final isSignIn = await _googleSignIn.isSignedIn();
       if (isSignIn) {
-        // isLoggedIn.value = true;
+        await _googleSignIn
+            .signInSilently()
+            .then((value) => _currentUser = value);
+        final googleAuth = await _currentUser!.authentication;
+
+        final credential = GoogleAuthProvider.credential(
+          idToken: googleAuth.idToken,
+          accessToken: googleAuth.accessToken,
+        );
+
+        await FirebaseAuth.instance
+            .signInWithCredential(credential)
+            .then((value) => user = value);
+
+        // save to firestore
+        CollectionReference users = fstore.collection('users');
+        // check if user login / register
+        users.doc(_currentUser!.email).update({
+          "lastSignin": user!.user!.metadata.lastSignInTime!.toIso8601String(),
+        });
+
+        final thisUser = await users.doc(_currentUser!.email).get();
+        // data from firebase
+        final userData = thisUser.data() as Map<String, dynamic>;
+
+        userThis = UserModel(
+          uid: userData["uid"],
+          name: userData["name"],
+          email: userData["email"],
+          photoUrl: userData["photoUrl"],
+          status: userData["status"],
+          createdAt: userData["createdAt"],
+          lastSignin: userData["lastSignin"],
+          updatedAt: userData["updatedAt"],
+        );
+
         return true;
       }
       return false;
@@ -82,16 +120,41 @@ class AuthController extends GetxController {
 
         // save to firestore
         CollectionReference users = fstore.collection('users');
-        users.doc(_currentUser!.email).set({
-          "uid": user!.user!.uid,
-          "nama": _currentUser!.displayName,
-          "email": _currentUser!.email,
-          "photoUrl": _currentUser!.photoUrl,
-          "status": "",
-          "created_at": user!.user!.metadata.creationTime!.toIso8601String(),
-          "last_signin": user!.user!.metadata.lastSignInTime!.toIso8601String(),
-          "updated_at": DateTime.now().toIso8601String(),
-        });
+        // check if user login / register
+        final checkUser = await users.doc(_currentUser!.email).get();
+        if (checkUser.data() == null) {
+          users.doc(_currentUser!.email).set({
+            "uid": user!.user!.uid,
+            "name": _currentUser!.displayName,
+            "email": _currentUser!.email,
+            "photoUrl": _currentUser!.photoUrl,
+            "status": "",
+            "createdAt": user!.user!.metadata.creationTime!.toIso8601String(),
+            "lastSignin":
+                user!.user!.metadata.lastSignInTime!.toIso8601String(),
+            "updatedAt": DateTime.now().toIso8601String(),
+          });
+        } else {
+          users.doc(_currentUser!.email).update({
+            "lastSignin":
+                user!.user!.metadata.lastSignInTime!.toIso8601String(),
+          });
+        }
+
+        final thisUser = await users.doc(_currentUser!.email).get();
+        // data from firebase
+        final userData = thisUser.data() as Map<String, dynamic>;
+
+        userThis = UserModel(
+          uid: userData["uid"],
+          name: userData["name"],
+          email: userData["email"],
+          photoUrl: userData["photoUrl"],
+          status: userData["status"],
+          createdAt: userData["createdAt"],
+          lastSignin: userData["lastSignin"],
+          updatedAt: userData["updatedAt"],
+        );
 
         isLoggedIn.value = true;
         Get.offAllNamed(Routes.HOME);
