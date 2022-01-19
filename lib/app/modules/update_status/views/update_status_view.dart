@@ -1,16 +1,18 @@
 // depedencis
 import 'dart:ui';
-
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 // controller & routing
 import '../controllers/update_status_controller.dart';
+import 'package:chatapp/app/controllers/auth_controller.dart';
 
 class UpdateStatusView extends GetView<UpdateStatusController> {
+  final Auth = Get.find<AuthController>();
   @override
   Widget build(BuildContext context) {
+    controller.statusController.text = Auth.userThis.value.status!;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: PreferredSize(
@@ -51,6 +53,10 @@ class UpdateStatusView extends GetView<UpdateStatusController> {
           children: [
             TextField(
               controller: controller.statusController,
+              textInputAction: TextInputAction.done,
+              onEditingComplete: () {
+                Auth.updateStatus(controller.statusController.text);
+              },
               style: GoogleFonts.poppins(
                 textStyle: TextStyle(
                   color: const Color(0xFF161616),
@@ -77,7 +83,8 @@ class UpdateStatusView extends GetView<UpdateStatusController> {
             Container(
               width: Get.width,
               child: ElevatedButton.icon(
-                onPressed: () {},
+                onPressed: () =>
+                    Auth.updateStatus(controller.statusController.text),
                 icon: Icon(Icons.update_outlined),
                 label: Text(
                   'Update',

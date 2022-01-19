@@ -7,7 +7,7 @@ class UpdateStatusController extends GetxController {
   @override
   void onInit() {
     // TODO: implement onInit
-    statusController = TextEditingController(text: 'Status Saia');
+    statusController = TextEditingController();
     super.onInit();
   }
 

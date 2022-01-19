@@ -14,11 +14,11 @@ class AuthController extends GetxController {
   var isSkipIntro = false.obs;
   var isLoggedIn = false.obs;
 
-  GoogleSignIn _googleSignIn = GoogleSignIn();
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
   GoogleSignInAccount? _currentUser;
-  UserCredential? user;
+  UserCredential? userCredential;
 
-  UserModel userThis = UserModel();
+  var userThis = UserModel().obs;
 
   FirebaseFirestore fstore = FirebaseFirestore.instance;
 
@@ -27,9 +27,17 @@ class AuthController extends GetxController {
     and set isLoggedIn to true (autologin)
     and set isSkipIntro to true
     */
-    await autoLogin().then((value) => {if (value) isLoggedIn.value = true});
+    await autoLogin().then((value) {
+      if (value) {
+        isLoggedIn.value = true;
+      }
+    });
 
-    await skipIntro().then((value) => {if (value) isSkipIntro.value = true});
+    await skipIntro().then((value) {
+      if (value) {
+        isSkipIntro.value = true;
+      }
+    });
   }
 
   Future<bool> skipIntro() async {
@@ -47,6 +55,7 @@ class AuthController extends GetxController {
         await _googleSignIn
             .signInSilently()
             .then((value) => _currentUser = value);
+
         final googleAuth = await _currentUser!.authentication;
 
         final credential = GoogleAuthProvider.credential(
@@ -56,20 +65,21 @@ class AuthController extends GetxController {
 
         await FirebaseAuth.instance
             .signInWithCredential(credential)
-            .then((value) => user = value);
+            .then((value) => userCredential = value);
 
         // save to firestore
         CollectionReference users = fstore.collection('users');
         // check if user login / register
         users.doc(_currentUser!.email).update({
-          "lastSignin": user!.user!.metadata.lastSignInTime!.toIso8601String(),
+          "lastSignin":
+              userCredential!.user!.metadata.lastSignInTime!.toIso8601String(),
         });
 
         final thisUser = await users.doc(_currentUser!.email).get();
         // data from firebase
         final userData = thisUser.data() as Map<String, dynamic>;
 
-        userThis = UserModel(
+        userThis(UserModel(
           uid: userData["uid"],
           name: userData["name"],
           email: userData["email"],
@@ -78,7 +88,7 @@ class AuthController extends GetxController {
           createdAt: userData["createdAt"],
           lastSignin: userData["lastSignin"],
           updatedAt: userData["updatedAt"],
-        );
+        ));
 
         return true;
       }
@@ -109,7 +119,7 @@ class AuthController extends GetxController {
 
         await FirebaseAuth.instance
             .signInWithCredential(credential)
-            .then((value) => user = value);
+            .then((value) => userCredential = value);
 
         // save state user logged in & not show intro screen
         final box = GetStorage();
@@ -124,20 +134,21 @@ class AuthController extends GetxController {
         final checkUser = await users.doc(_currentUser!.email).get();
         if (checkUser.data() == null) {
           users.doc(_currentUser!.email).set({
-            "uid": user!.user!.uid,
+            "uid": userCredential!.user!.uid,
             "name": _currentUser!.displayName,
             "email": _currentUser!.email,
             "photoUrl": _currentUser!.photoUrl,
             "status": "",
-            "createdAt": user!.user!.metadata.creationTime!.toIso8601String(),
-            "lastSignin":
-                user!.user!.metadata.lastSignInTime!.toIso8601String(),
+            "createdAt":
+                userCredential!.user!.metadata.creationTime!.toIso8601String(),
+            "lastSignin": userCredential!.user!.metadata.lastSignInTime!
+                .toIso8601String(),
             "updatedAt": DateTime.now().toIso8601String(),
           });
         } else {
           users.doc(_currentUser!.email).update({
-            "lastSignin":
-                user!.user!.metadata.lastSignInTime!.toIso8601String(),
+            "lastSignin": userCredential!.user!.metadata.lastSignInTime!
+                .toIso8601String(),
           });
         }
 
@@ -145,7 +156,9 @@ class AuthController extends GetxController {
         // data from firebase
         final userData = thisUser.data() as Map<String, dynamic>;
 
-        userThis = UserModel(
+        // userThis.update((val) { })
+
+        userThis(UserModel(
           uid: userData["uid"],
           name: userData["name"],
           email: userData["email"],
@@ -154,7 +167,7 @@ class AuthController extends GetxController {
           createdAt: userData["createdAt"],
           lastSignin: userData["lastSignin"],
           updatedAt: userData["updatedAt"],
-        );
+        ));
 
         isLoggedIn.value = true;
         Get.offAllNamed(Routes.HOME);
@@ -170,5 +183,59 @@ class AuthController extends GetxController {
     await _googleSignIn.disconnect();
     await _googleSignIn.signOut();
     Get.offAllNamed(Routes.LOGIN);
+  }
+
+  // profile
+
+  void changeProfile(String name, String status) {
+    String date = DateTime.now().toIso8601String();
+    // update in firebase
+    CollectionReference users = fstore.collection('users');
+    users.doc(_currentUser!.email).update({
+      "name": name,
+      "status": status,
+      "lastSignin":
+          userCredential!.user!.metadata.lastSignInTime!.toIso8601String(),
+      "updatedAt": date,
+    });
+    // update model
+    userThis.update((user) {
+      user!.name = name;
+      user.status = status;
+      user.lastSignin =
+          userCredential!.user!.metadata.lastSignInTime!.toIso8601String();
+      user.updatedAt = date;
+    });
+
+    userThis.refresh();
+    Get.defaultDialog(
+      title: "Success",
+      middleText: "Change profile successfully!",
+    );
+  }
+
+  void updateStatus(String status) {
+    String date = DateTime.now().toIso8601String();
+    // update in firebase
+    CollectionReference users = fstore.collection('users');
+    users.doc(_currentUser!.email).update({
+      "status": status,
+      "lastSignin":
+          userCredential!.user!.metadata.lastSignInTime!.toIso8601String(),
+      "updatedAt": date,
+    });
+    // update model
+    userThis.update((user) {
+      user!.status = status;
+      user.lastSignin =
+          userCredential!.user!.metadata.lastSignInTime!.toIso8601String();
+      user.updatedAt = date;
+    });
+
+    userThis.refresh();
+    Get.defaultDialog(
+      title: "Success",
+      middleText: "Update status successfully!",
+    );
   }
 }

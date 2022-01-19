@@ -56,29 +56,31 @@ class ProfileView extends GetView<ProfileController> {
                     height: 160,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(200),
-                      child: Auth.userThis.photoUrl == null
+                      child: Auth.userThis.value.photoUrl == null
                           ? Image.asset(
                               'assets/logo/noimage.png',
                               fit: BoxFit.cover,
                             )
                           : Image.network(
-                              Auth.userThis.photoUrl!,
+                              Auth.userThis.value.photoUrl!,
                               fit: BoxFit.cover,
                             ),
                     ),
                   ),
                 ),
-                Text(
-                  "${Auth.userThis.name}",
-                  textAlign: TextAlign.center,
-                  style: GoogleFonts.poppins(
-                    fontSize: 23,
-                    fontWeight: FontWeight.bold,
-                    color: const Color(0xFF2C2B2B),
+                Obx(
+                  () => Text(
+                    "${Auth.userThis.value.name}",
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.poppins(
+                      fontSize: 23,
+                      fontWeight: FontWeight.bold,
+                      color: const Color(0xFF2C2B2B),
+                    ),
                   ),
                 ),
                 Text(
-                  "${Auth.userThis.email}",
+                  "${Auth.userThis.value.email}",
                   textAlign: TextAlign.center,
                   style: GoogleFonts.poppins(
                     fontSize: 18,
