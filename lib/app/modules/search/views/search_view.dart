@@ -9,44 +9,6 @@ import '../controllers/search_controller.dart';
 import 'package:chatapp/app/routes/app_pages.dart';
 
 class SearchView extends GetView<SearchController> {
-  final List<Widget> Friends = List.generate(
-    20,
-    (index) => ListTile(
-      leading: CircleAvatar(
-        radius: 30,
-        child: Image.asset('assets/logo/noimage.png'),
-      ),
-      title: Text(
-        'Nama Chat ke-${index + 1}',
-        style: GoogleFonts.poppins(
-          fontSize: 20,
-          fontWeight: FontWeight.w600,
-          color: const Color(0xFF272727),
-        ),
-      ),
-      subtitle: Text(
-        'emailorang${index + 1}@gmail.com',
-        style: GoogleFonts.poppins(
-          fontSize: 16,
-          fontWeight: FontWeight.w400,
-          color: const Color(0xE73D3C3C),
-        ),
-      ),
-      trailing: GestureDetector(
-        onTap: () => Get.toNamed(Routes.CHAT_ROOM),
-        child: Chip(
-          label: Text(
-            'Message',
-            style: GoogleFonts.poppins(
-              fontSize: 12,
-              fontWeight: FontWeight.w400,
-              color: const Color(0xFF383838),
-            ),
-          ),
-        ),
-      ),
-    ),
-  );
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -82,6 +44,7 @@ class SearchView extends GetView<SearchController> {
             child: Align(
               alignment: Alignment.bottomCenter,
               child: TextField(
+                onChanged: (value) => controller.searchFriend(value),
                 controller: controller.searchController,
                 cursorColor: const Color(0xE36F41EE),
                 decoration: InputDecoration(
@@ -112,19 +75,55 @@ class SearchView extends GetView<SearchController> {
         ),
         preferredSize: Size.fromHeight(140),
       ),
-      body: Friends.length == 0
-          ? Center(
-              child: Container(
-                width: Get.width * 0.7,
-                height: Get.width * 0.7,
-                child: Lottie.asset('assets/lottie/empty.json'),
+      body: Obx(
+        () => controller.tempSearch.length == 0
+            ? Center(
+                child: Container(
+                  width: Get.width * 0.7,
+                  height: Get.width * 0.7,
+                  child: Lottie.asset('assets/lottie/empty.json'),
+                ),
+              )
+            : ListView.builder(
+                padding: EdgeInsets.symmetric(vertical: 10),
+                itemCount: controller.tempSearch.length,
+                itemBuilder: (BuildContext context, int index) => ListTile(
+                  leading: CircleAvatar(
+                    radius: 30,
+                    child: Image.asset('assets/logo/noimage.png'),
+                  ),
+                  title: Text(
+                    "${controller.tempSearch[index]["name"]}",
+                    style: GoogleFonts.poppins(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                      color: const Color(0xFF272727),
+                    ),
+                  ),
+                  subtitle: Text(
+                    "${controller.tempSearch[index]["email"]}",
+                    style: GoogleFonts.poppins(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400,
+                      color: const Color(0xE73D3C3C),
+                    ),
+                  ),
+                  trailing: GestureDetector(
+                    onTap: () => Get.toNamed(Routes.CHAT_ROOM),
+                    child: Chip(
+                      label: Text(
+                        'Message',
+                        style: GoogleFonts.poppins(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400,
+                          color: const Color(0xFF383838),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
               ),
-            )
-          : ListView.builder(
-              padding: EdgeInsets.symmetric(vertical: 10),
-              itemCount: Friends.length,
-              itemBuilder: (BuildContext context, int index) => Friends[index],
-            ),
+      ),
     );
   }
 }
