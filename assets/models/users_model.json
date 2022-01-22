@@ -1,0 +1,25 @@
+{
+  "uid": "7mI3RJwbfqxFATG8RHgk",
+  "name": "Faiz Hidayatulloh",
+  "keyName": "F",
+  "email": "faizhid11@gmail.com",
+  "creationTime": "2022-01-24T14:31:05.491",
+  "lastSignInTime": "2022-01-27T11:18:22.079",
+  "photoUrl": "https://lh3.googleusercontent.com/a-/AOh14GinGZ0rErIO2Yy8Ny9IJ3Tsrz400td0xb8RBL5h=s96-c",
+  "status": "halo semua..",
+  "updatedTime": "2022-01-25T13:28:59.748721",
+  "chats": [
+    {
+      "connection": "mail@gmail.com",
+      "chat_id": "RO337DaJnITOcfDgo2ENh8IPanVs",
+      "lastTime": "2022-01-25T13:29:02.748721",
+      "total_unread": 0
+    },
+    {
+      "connection": "ehsan@gmail.com",
+      "chat_id": "JnITOcfDgo2ENh8IPanVsRO337Da",
+      "lastTime": "2022-01-25T13:28:59.748721",
+      "total_unread": 0
+    }
+  ]
+}

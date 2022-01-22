@@ -4,7 +4,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:chatapp/app/data/models/user_model.dart';
+import 'package:chatapp/app/data/models/users_model.dart';
 
 // route
 import 'package:chatapp/app/routes/app_pages.dart';
@@ -18,7 +18,7 @@ class AuthController extends GetxController {
   GoogleSignInAccount? _currentUser;
   UserCredential? userCredential;
 
-  var userThis = UserModel().obs;
+  var userThis = UsersModel().obs;
 
   FirebaseFirestore fstore = FirebaseFirestore.instance;
 
@@ -79,15 +79,16 @@ class AuthController extends GetxController {
         // data from firebase
         final userData = thisUser.data() as Map<String, dynamic>;
 
-        userThis(UserModel(
+        userThis(UsersModel(
           uid: userData["uid"],
           name: userData["name"],
           email: userData["email"],
+          keyName: userData["keyName"],
           photoUrl: userData["photoUrl"],
           status: userData["status"],
-          createdAt: userData["createdAt"],
-          lastSignin: userData["lastSignin"],
-          updatedAt: userData["updatedAt"],
+          creationTime: userData["creationTime"],
+          lastSignInTime: userData["lastSignInTime"],
+          updatedTime: userData["updatedTime"],
         ));
 
         return true;
@@ -136,18 +137,19 @@ class AuthController extends GetxController {
           users.doc(_currentUser!.email).set({
             "uid": userCredential!.user!.uid,
             "name": _currentUser!.displayName,
+            "keyName": _currentUser!.displayName!.substring(0, 1).toUpperCase(),
             "email": _currentUser!.email,
             "photoUrl": _currentUser!.photoUrl,
             "status": "",
-            "createdAt":
+            "creationTime":
                 userCredential!.user!.metadata.creationTime!.toIso8601String(),
-            "lastSignin": userCredential!.user!.metadata.lastSignInTime!
+            "lastSignInTime": userCredential!.user!.metadata.lastSignInTime!
                 .toIso8601String(),
-            "updatedAt": DateTime.now().toIso8601String(),
+            "updatedTime": DateTime.now().toIso8601String(),
           });
         } else {
           users.doc(_currentUser!.email).update({
-            "lastSignin": userCredential!.user!.metadata.lastSignInTime!
+            "lastSignInTime": userCredential!.user!.metadata.lastSignInTime!
                 .toIso8601String(),
           });
         }
@@ -158,15 +160,16 @@ class AuthController extends GetxController {
 
         // userThis.update((val) { })
 
-        userThis(UserModel(
+        userThis(UsersModel(
           uid: userData["uid"],
           name: userData["name"],
           email: userData["email"],
+          keyName: userData["keyName"],
           photoUrl: userData["photoUrl"],
           status: userData["status"],
-          createdAt: userData["createdAt"],
-          lastSignin: userData["lastSignin"],
-          updatedAt: userData["updatedAt"],
+          creationTime: userData["creationTime"],
+          lastSignInTime: userData["lastSignInTime"],
+          updatedTime: userData["updatedTime"],
         ));
 
         isLoggedIn.value = true;
@@ -193,18 +196,20 @@ class AuthController extends GetxController {
     CollectionReference users = fstore.collection('users');
     users.doc(_currentUser!.email).update({
       "name": name,
+      "keyName": name.substring(0, 1).toUpperCase(),
       "status": status,
-      "lastSignin":
+      "lastSignInTime":
           userCredential!.user!.metadata.lastSignInTime!.toIso8601String(),
-      "updatedAt": date,
+      "updatedTime": date,
     });
     // update model
     userThis.update((user) {
       user!.name = name;
+      user.keyName = name.substring(0, 1).toUpperCase();
       user.status = status;
-      user.lastSignin =
+      user.lastSignInTime =
           userCredential!.user!.metadata.lastSignInTime!.toIso8601String();
-      user.updatedAt = date;
+      user.updatedTime = date;
     });
 
     userThis.refresh();
@@ -220,16 +225,16 @@ class AuthController extends GetxController {
     CollectionReference users = fstore.collection('users');
     users.doc(_currentUser!.email).update({
       "status": status,
-      "lastSignin":
+      "lastSignInTime":
           userCredential!.user!.metadata.lastSignInTime!.toIso8601String(),
-      "updatedAt": date,
+      "updatedTime": date,
     });
     // update model
     userThis.update((user) {
       user!.status = status;
-      user.lastSignin =
+      user.lastSignInTime =
           userCredential!.user!.metadata.lastSignInTime!.toIso8601String();
-      user.updatedAt = date;
+      user.updatedTime = date;
     });
 
     userThis.refresh();

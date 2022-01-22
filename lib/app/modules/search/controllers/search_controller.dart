@@ -19,7 +19,7 @@ class SearchController extends GetxController {
       var upper = data.substring(0, 1).toUpperCase() + data.substring(1);
       // print(upper);
       if (firstQuery.length == 0 && data.length == 1) {
-        CollectionReference client = await firestore.collection('clients');
+        CollectionReference client = await firestore.collection('users');
         final keyRes = await client
             .where('keyName', isEqualTo: data.substring(0, 1).toUpperCase())
             .get();

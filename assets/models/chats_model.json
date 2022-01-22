@@ -1,0 +1,26 @@
+{
+  "connections": [
+    "faizhid11@gmail.com",
+    "mail@gmail.com"
+  ],
+  "total_chats": 10,
+  "total_read": 10,
+  "total_unread": 10,
+  "chat": [
+    {
+      "pengirim": "faizhid11@gmail.com",
+      "penerima": "mail@gmail.com",
+      "pesan": "Halo fit, apa kabar ?",
+      "time": "2021-08-25T13:28:59.748721",
+      "isRead": true
+    },
+    {
+      "pengirim": "mail@gmail.com",
+      "penerima": "faizhid11@gmail.com",
+      "pesan": "Baik dika, kamu sendiri gimana ?",
+      "time": "2021-08-25T13:29:02.748721",
+      "isRead": false
+    }
+  ],
+  "lastTime": "2021-08-25T13:29:02.748721"
+}
