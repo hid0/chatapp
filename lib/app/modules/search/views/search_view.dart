@@ -1,4 +1,5 @@
 // depedencies
+import 'package:chatapp/app/controllers/auth_controller.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -9,6 +10,7 @@ import '../controllers/search_controller.dart';
 import 'package:chatapp/app/routes/app_pages.dart';
 
 class SearchView extends GetView<SearchController> {
+  final Auth = Get.find<AuthController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,7 +46,10 @@ class SearchView extends GetView<SearchController> {
             child: Align(
               alignment: Alignment.bottomCenter,
               child: TextField(
-                onChanged: (value) => controller.searchFriend(value),
+                onChanged: (value) => controller.searchFriend(
+                  value,
+                  Auth.userThis.value.email!,
+                ),
                 controller: controller.searchController,
                 cursorColor: const Color(0xE36F41EE),
                 decoration: InputDecoration(

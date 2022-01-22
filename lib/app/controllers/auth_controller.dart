@@ -70,7 +70,7 @@ class AuthController extends GetxController {
         // save to firestore
         CollectionReference users = fstore.collection('users');
         // check if user login / register
-        users.doc(_currentUser!.email).update({
+        await users.doc(_currentUser!.email).update({
           "lastSignin":
               userCredential!.user!.metadata.lastSignInTime!.toIso8601String(),
         });
@@ -79,22 +79,12 @@ class AuthController extends GetxController {
         // data from firebase
         final userData = thisUser.data() as Map<String, dynamic>;
 
-        userThis(UsersModel(
-          uid: userData["uid"],
-          name: userData["name"],
-          email: userData["email"],
-          keyName: userData["keyName"],
-          photoUrl: userData["photoUrl"],
-          status: userData["status"],
-          creationTime: userData["creationTime"],
-          lastSignInTime: userData["lastSignInTime"],
-          updatedTime: userData["updatedTime"],
-        ));
+        userThis(UsersModel.fromJson(userData));
 
         return true;
       }
       return false;
-    } catch (e) {
+    } catch (err) {
       return false;
     }
   }
@@ -134,7 +124,7 @@ class AuthController extends GetxController {
         // check if user login / register
         final checkUser = await users.doc(_currentUser!.email).get();
         if (checkUser.data() == null) {
-          users.doc(_currentUser!.email).set({
+          await users.doc(_currentUser!.email).set({
             "uid": userCredential!.user!.uid,
             "name": _currentUser!.displayName,
             "keyName": _currentUser!.displayName!.substring(0, 1).toUpperCase(),
@@ -146,9 +136,10 @@ class AuthController extends GetxController {
             "lastSignInTime": userCredential!.user!.metadata.lastSignInTime!
                 .toIso8601String(),
             "updatedTime": DateTime.now().toIso8601String(),
+            "chats": [],
           });
         } else {
-          users.doc(_currentUser!.email).update({
+          await users.doc(_currentUser!.email).update({
             "lastSignInTime": userCredential!.user!.metadata.lastSignInTime!
                 .toIso8601String(),
           });
@@ -158,19 +149,7 @@ class AuthController extends GetxController {
         // data from firebase
         final userData = thisUser.data() as Map<String, dynamic>;
 
-        // userThis.update((val) { })
-
-        userThis(UsersModel(
-          uid: userData["uid"],
-          name: userData["name"],
-          email: userData["email"],
-          keyName: userData["keyName"],
-          photoUrl: userData["photoUrl"],
-          status: userData["status"],
-          creationTime: userData["creationTime"],
-          lastSignInTime: userData["lastSignInTime"],
-          updatedTime: userData["updatedTime"],
-        ));
+        userThis(UsersModel.fromJson(userData));
 
         isLoggedIn.value = true;
         Get.offAllNamed(Routes.HOME);
