@@ -222,4 +222,40 @@ class AuthController extends GetxController {
       middleText: "Update status successfully!",
     );
   }
+
+  // Searching
+
+  void addNewConnection(String email) async {
+    String date = DateTime.now().toIso8601String();
+    CollectionReference chats = fstore.collection("chats");
+
+    final newChatDoc = await chats.add({
+      "connection": [_currentUser!.email, email],
+      "total_chats": 0,
+      "total_read": 0,
+      "total_unread": 0,
+      "chats": [],
+      "lastTime": date,
+    });
+
+    CollectionReference users = fstore.collection("users");
+
+    await users.doc(_currentUser!.email).update({
+      "chats": [
+        {
+          "connection": email,
+          "chat_id": newChatDoc.id,
+          "lastTime": date,
+        }
+      ]
+    });
+    userThis.update((user) {
+      user!.chats = [
+        Chat(chatId: newChatDoc.id, connection: email, lastTime: date)
+      ];
+    });
+
+    userThis.refresh();
+    Get.toNamed(Routes.CHAT_ROOM);
+  }
 }
