@@ -226,36 +226,66 @@ class AuthController extends GetxController {
   // Searching
 
   void addNewConnection(String email) async {
+    var chat_id;
+    bool flagNewConnect = false;
     String date = DateTime.now().toIso8601String();
     CollectionReference chats = fstore.collection("chats");
-
-    final newChatDoc = await chats.add({
-      "connection": [_currentUser!.email, email],
-      "total_chats": 0,
-      "total_read": 0,
-      "total_unread": 0,
-      "chats": [],
-      "lastTime": date,
-    });
-
     CollectionReference users = fstore.collection("users");
 
-    await users.doc(_currentUser!.email).update({
-      "chats": [
-        {
-          "connection": email,
-          "chat_id": newChatDoc.id,
-          "lastTime": date,
-        }
-      ]
-    });
-    userThis.update((user) {
-      user!.chats = [
-        Chat(chatId: newChatDoc.id, connection: email, lastTime: date)
-      ];
-    });
+    final checkData = await users.doc(_currentUser!.email).get();
+    final chatDocs =
+        (checkData.data() as Map<String, dynamic>)['chats'] as List;
 
-    userThis.refresh();
-    Get.toNamed(Routes.CHAT_ROOM);
+    if (chatDocs.length != 0) {
+      // users has been chat with someone
+
+      chatDocs.forEach((singleChat) {
+        if (singleChat['connection'] == email) {
+          chat_id = singleChat['chat_id'];
+        }
+      });
+
+      if (chat_id != null) {
+        // has been connected with some email
+        flagNewConnect = false;
+      } else {
+        // not yet connected with other account
+        flagNewConnect = true;
+      }
+    } else {
+      // not yet have history chat
+      flagNewConnect = true;
+    }
+
+    if (flagNewConnect) {
+      final newChatDoc = await chats.add({
+        "connection": [_currentUser!.email, email],
+        "total_chats": 0,
+        "total_read": 0,
+        "total_unread": 0,
+        "chats": [],
+        "lastTime": date,
+      });
+
+      await users.doc(_currentUser!.email).update({
+        "chats": [
+          {
+            "connection": email,
+            "chat_id": newChatDoc.id,
+            "lastTime": date,
+          }
+        ]
+      });
+      userThis.update((user) {
+        user!.chats = [
+          Chat(chatId: newChatDoc.id, connection: email, lastTime: date)
+        ];
+      });
+      chat_id = newChatDoc.id;
+
+      userThis.refresh();
+    }
+    print(chat_id);
+    Get.toNamed(Routes.CHAT_ROOM, arguments: chat_id);
   }
 }
